@@ -3,6 +3,7 @@
 # WEB1.1 Assignment 1: Request/Response
 
 from flask import Flask
+from random import randint
 
 app = Flask(__name__)
 
@@ -49,6 +50,49 @@ def multiply(number1, number2):
         return calc
     else:
         return "Invalid inputs. Please try again by entering 2 numbers!"
+
+@app.route("/sayntimes/<word>/<n>")
+def sayntimes(word, n):
+    """Displays a word repeatedly based on user's input"""
+
+    if word.isalpha() and n.isdigit():
+        n = int(n)
+        ntimes = f"{word} " * n
+        return ntimes
+    else:
+        return "Invalid input. Please try again by entering a word and a number!"
+
+@app.route("/reverse/<string>")
+def reverse(string):
+    """Displays a string in reverse order based on user's input"""
+    return string[::-1]
+
+@app.route("/strangecaps/<string>")
+def strangecaps(string):
+    """Displays characters of a string in alternating case based on user's input"""
+
+    if string[0].islower():
+        switch = True
+    else:
+        switch = False
+
+    strangecaps = ""
+
+    for char in string:
+        if switch:
+            strangecaps += char.lower()
+        else:
+            strangecaps += char.upper()
+        switch = not switch
+
+    return strangecaps
+
+@app.route("/dicegame")
+def dicegame():
+    """Generates a number between 1-6; displays a message based on output"""
+    num = randint(1, 6)
+    msg = "won" if num == 6 else "lost"
+    return f"You rolled a {num}. You {msg}!"
 
 if __name__ == "__main__":
     app.run(debug=True)
